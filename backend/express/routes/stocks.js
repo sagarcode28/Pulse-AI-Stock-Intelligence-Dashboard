@@ -7,12 +7,15 @@ router.get("/:ticker", async(req, res) => {
         const ticker = req.params.ticker.toUpperCase();
         console.log(`fetching Data for ${ticker}`);
 
-        const prices = await getDailyPrices(ticker);
+        const { prices, source } = await getDailyPrices(ticker);
         
+        const recent = prices.slice(-30);
+
         res.json({
             ticker,
-            count: prices.length,
-            prices
+            source,
+            count: recent.length,
+            prices : recent
         })
     }catch(err){
         console.error(err.message);
