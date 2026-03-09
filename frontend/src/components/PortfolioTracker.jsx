@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchPortfolio, addHolding, deleteHolding } from "../utils/api";
+import PortfolioPieChart from "./PortfolioPieChart";
 
 export default function PortfolioTracker() {
   const [portfolio, setPortfolio] = useState(null);
@@ -82,10 +83,10 @@ export default function PortfolioTracker() {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
             {[
-              { key: "ticker",   placeholder: "Ticker (AAPL)",   type: "text"   },
-              { key: "shares",   placeholder: "Shares (10)",     type: "number" },
+              { key: "ticker", placeholder: "Ticker (AAPL)", type: "text" },
+              { key: "shares", placeholder: "Shares (10)", type: "number" },
               { key: "buyPrice", placeholder: "Buy Price ($180)", type: "number" },
-              { key: "buyDate",  placeholder: "Buy Date",        type: "date"   },
+              { key: "buyDate", placeholder: "Buy Date", type: "date" },
             ].map(({ key, placeholder, type }) => (
               <input
                 key={key}
@@ -115,7 +116,7 @@ export default function PortfolioTracker() {
       {summary && holdings.length > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
           {[
-            { label: "Invested",     value: `$${summary.totalCost.toLocaleString()}` },
+            { label: "Invested", value: `$${summary.totalCost.toLocaleString()}` },
             { label: "Current Value", value: `$${summary.totalValue.toLocaleString()}` },
             {
               label: "Total P&L",
@@ -136,10 +137,16 @@ export default function PortfolioTracker() {
         </div>
       )}
 
+      {holdings.length >= 2 && (
+        <div className="mb-5">
+          <PortfolioPieChart holdings={holdings} />
+        </div>
+      )}
+
       {/* Holdings table */}
       {loading ? (
         <div className="animate-pulse space-y-2">
-          {[1,2,3].map(i => <div key={i} className="h-10 bg-gray-700 rounded" />)}
+          {[1, 2, 3].map(i => <div key={i} className="h-10 bg-gray-700 rounded" />)}
         </div>
       ) : holdings.length === 0 ? (
         <div className="text-center py-10 text-gray-600">
@@ -174,17 +181,15 @@ export default function PortfolioTracker() {
                   <td className="py-3 text-right text-gray-300">
                     {h.currentValue ? `$${h.currentValue.toLocaleString()}` : "—"}
                   </td>
-                  <td className={`py-3 text-right font-semibold ${
-                    h.pnl === null ? "text-gray-500"
-                    : h.pnl >= 0 ? "text-green-400" : "text-red-400"
-                  }`}>
+                  <td className={`py-3 text-right font-semibold ${h.pnl === null ? "text-gray-500"
+                      : h.pnl >= 0 ? "text-green-400" : "text-red-400"
+                    }`}>
                     {h.pnl === null ? "—"
                       : `${h.pnl >= 0 ? "+" : ""}$${Math.abs(h.pnl).toLocaleString()}`}
                   </td>
-                  <td className={`py-3 text-right font-bold ${
-                    h.pnlPct === null ? "text-gray-500"
-                    : h.pnlPct >= 0 ? "text-green-400" : "text-red-400"
-                  }`}>
+                  <td className={`py-3 text-right font-bold ${h.pnlPct === null ? "text-gray-500"
+                      : h.pnlPct >= 0 ? "text-green-400" : "text-red-400"
+                    }`}>
                     {h.pnlPct === null ? "—"
                       : `${h.pnlPct >= 0 ? "+" : ""}${h.pnlPct}%`}
                   </td>

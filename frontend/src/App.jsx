@@ -10,14 +10,14 @@ import WatchlistSidebar from "./components/WatchlistSidebar";
 const DEFAULT_TICKERS = ["AAPL", "TSLA", "GOOGL", "MSFT", "DAWN"];
 
 export default function App() {
-  const [ticker, setTicker]               = useState("");
-  const [input, setInput]                 = useState("");
-  const [stockData, setStockData]         = useState(null);
-  const [insight, setInsight]             = useState(null);
-  const [loadingStock, setLoadingStock]   = useState(false);
+  const [ticker, setTicker] = useState("");
+  const [input, setInput] = useState("");
+  const [stockData, setStockData] = useState(null);
+  const [insight, setInsight] = useState(null);
+  const [loadingStock, setLoadingStock] = useState(false);
   const [loadingInsight, setLoadingInsight] = useState(false);
-  const [error, setError]                 = useState(null);
-  const [activeTab, setActiveTab]         = useState("Dashboard");
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("Dashboard");
 
   const handleSearch = async (symbol) => {
     const t = (symbol || input).toUpperCase().trim();
@@ -51,11 +51,11 @@ export default function App() {
     }
   };
 
-  const prices      = stockData?.prices    || [];
-  const anomalies   = stockData?.anomalies || [];
-  const latestClose = prices.at(-1)?.close  ?? 0;
-  const prevClose   = prices.at(-2)?.close  ?? latestClose;
-  const dayChange   = latestClose - prevClose;
+  const prices = stockData?.prices || [];
+  const anomalies = stockData?.anomalies || [];
+  const latestClose = prices.at(-1)?.close ?? 0;
+  const prevClose = prices.at(-2)?.close ?? latestClose;
+  const dayChange = latestClose - prevClose;
   const dayChangePct = prevClose ? (dayChange / prevClose) * 100 : 0;
 
   return (
@@ -86,19 +86,23 @@ export default function App() {
         </div>
       </nav>
 
-      {/* ── Main Layout: Sidebar + Content ── */}
+      {stockData?.source === "demo" && (
+        <div className="bg-yellow-500/10 border-b border-yellow-500/20
+                  px-6 py-2 text-xs text-yellow-400 text-center">
+          🎭 Showing simulated data — Alpha Vantage API quota reached.
+          Data resets daily. Cache persists for 1 hour.
+        </div>
+      )}
+
       <div className="flex gap-6 max-w-7xl mx-auto px-6 py-8">
 
-        {/* Watchlist Sidebar */}
         <WatchlistSidebar
           onSelectTicker={handleSearch}
           activeTicker={ticker}
         />
 
-        {/* Main Content */}
         <div className="flex-1 min-w-0">
 
-          {/* Search */}
           <div className="mb-6">
             <div className="flex gap-3 max-w-lg">
               <input
@@ -127,11 +131,10 @@ export default function App() {
                 <button
                   key={t}
                   onClick={() => handleSearch(t)}
-                  className={`text-xs border px-3 py-1 rounded-full transition-colors ${
-                    ticker === t
-                      ? "border-indigo-500 text-indigo-400 bg-indigo-500/10"
-                      : "border-gray-700 text-gray-400 hover:border-indigo-500 hover:text-indigo-400"
-                  }`}
+                  className={`text-xs border px-3 py-1 rounded-full transition-colors ${ticker === t
+                    ? "border-indigo-500 text-indigo-400 bg-indigo-500/10"
+                    : "border-gray-700 text-gray-400 hover:border-indigo-500 hover:text-indigo-400"
+                    }`}
                 >
                   {t}
                 </button>
@@ -146,11 +149,10 @@ export default function App() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-colors ${
-                  activeTab === tab
-                    ? "bg-indigo-600 text-white"
-                    : "text-gray-400 hover:text-white"
-                }`}
+                className={`px-4 py-1.5 rounded-md text-sm font-semibold transition-colors ${activeTab === tab
+                  ? "bg-indigo-600 text-white"
+                  : "text-gray-400 hover:text-white"
+                  }`}
               >
                 {tab === "Dashboard" ? "📊 Dashboard" : "💼 Portfolio"}
               </button>
@@ -169,7 +171,7 @@ export default function App() {
 
               {loadingStock && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 animate-pulse">
-                  {[1,2,3,4].map(i => (
+                  {[1, 2, 3, 4].map(i => (
                     <div key={i} className="h-24 bg-gray-800 rounded-xl" />
                   ))}
                 </div>
@@ -177,29 +179,18 @@ export default function App() {
 
               {stockData && !loadingStock && (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  <KPICard
-                    title="Current Price"
-                    value={`$${latestClose.toFixed(2)}`}
-                    subtitle={ticker}
-                    accent={true}
-                  />
-                  <KPICard
-                    title="Day Change"
-                    value={`${dayChange >= 0 ? "+" : ""}${dayChange.toFixed(2)}`}
-                    subtitle={`${dayChangePct >= 0 ? "+" : ""}${dayChangePct.toFixed(2)}% vs prev close`}
-                  />
-                  <KPICard
-                    title="Anomalies (30d)"
-                    value={anomalies.length}
-                    subtitle={anomalies.length > 0
-                      ? "⚠ Unusual activity"
-                      : "✅ Clean price action"}
-                  />
-                  <KPICard
-                    title="Data Source"
-                    value={stockData.source === "cache" ? "⚡ Cached" : "🌐 Live"}
-                    subtitle={`${stockData.count} days analyzed`}
-                  />
+                  <div className="fade-in fade-in-delay-1">
+                    <KPICard title="Current Price" value={`$${latestClose.toFixed(2)}`} subtitle={ticker} accent={true} />
+                  </div>
+                  <div className="fade-in fade-in-delay-2">
+                    <KPICard title="Day Change" value={`${dayChange >= 0 ? "+" : ""}${dayChange.toFixed(2)}`} subtitle={`${dayChangePct >= 0 ? "+" : ""}${dayChangePct.toFixed(2)}% vs prev close`} />
+                  </div>
+                  <div className="fade-in fade-in-delay-3">
+                    <KPICard title="Anomalies (30d)" value={anomalies.length} subtitle={anomalies.length > 0 ? "⚠ Unusual activity" : "✅ Clean price action"} />
+                  </div>
+                  <div className="fade-in fade-in-delay-4">
+                    <KPICard title="Data Source" value={stockData.source === "cache" ? "⚡ Cached" : stockData.source === "demo" ? "🎭 Demo" : "🌐 Live"} subtitle={`${stockData.count} days analyzed`} />
+                  </div>
                 </div>
               )}
 
@@ -241,6 +232,24 @@ export default function App() {
           {activeTab === "Portfolio" && <PortfolioTracker />}
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-800 mt-16 px-6 py-6
+                   text-center text-xs text-gray-700">
+        <p>
+          Pulse AI · Built with React, Express, FastAPI, MongoDB + Gemini
+        </p>
+        <p className="mt-1">
+          Market data provided by{" "}
+          <a href="https://www.alphavantage.co"
+            target="_blank"
+            rel="noreferrer"
+            className="text-gray-600 hover:text-indigo-400 transition-colors">
+            Alpha Vantage
+          </a>
+          {" "}· For educational purposes only. Not financial advice.
+        </p>
+      </footer>
     </div>
   );
 }

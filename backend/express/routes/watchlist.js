@@ -16,14 +16,24 @@ router.get("/", async (req, res) => {
           const change = latest && prev
             ? parseFloat((((latest.close - prev.close) / prev.close) * 100).toFixed(2))
             : 0;
+
+          const sparkline = prices.slice(-7).map((p) => p.close);
+
           return {
             _id: item._id,
             ticker: item.ticker,
             price: latest?.close ?? null,
             change,
+            sparkline,              // ← NEW
           };
         } catch {
-          return { _id: item._id, ticker: item.ticker, price: null, change: null };
+          return {
+            _id: item._id,
+            ticker: item.ticker,
+            price: null,
+            change: null,
+            sparkline: [],
+          };
         }
       })
     );

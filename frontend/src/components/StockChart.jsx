@@ -21,7 +21,15 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function StockChart({ prices = [], anomalies = [], ticker }) {
-  // Format date to short label (Oct 10)
+  if (!prices || prices.length === 0) {
+    return (
+      <div className="bg-gray-800/60 border border-gray-700/50 rounded-xl p-5
+                      flex items-center justify-center h-40">
+        <p className="text-gray-600 text-sm">No price data available</p>
+      </div>
+    );
+  }
+
   const chartData = prices.map((p) => ({
     ...p,
     label: new Date(p.date).toLocaleDateString("en-US", {
@@ -29,10 +37,8 @@ export default function StockChart({ prices = [], anomalies = [], ticker }) {
     }),
   }));
 
-  // Set of anomaly dates for quick lookup
   const anomalyDates = new Set(anomalies.map((a) => a.date));
 
-  // Min/max for YAxis domain with padding
   const closes = prices.map((p) => p.close);
   const minClose = Math.min(...closes) * 0.98;
   const maxClose = Math.max(...closes) * 1.02;
@@ -77,7 +83,7 @@ export default function StockChart({ prices = [], anomalies = [], ticker }) {
             dot={false}
             activeDot={{ r: 4, fill: "#6366f1" }}
           />
-          {/* Red anomaly dots */}
+
           {chartData
             .filter((d) => anomalyDates.has(d.date))
             .map((d) => (

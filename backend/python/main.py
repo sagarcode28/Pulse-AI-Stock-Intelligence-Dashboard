@@ -5,8 +5,12 @@ from routers.insights import router as insights_router
 
 app = FastAPI(title="Python Service", description="Anomaly detection & AI insights for stock data")
 
-app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:4000", "http://localhost:3000", "http://localhost:8000"],
-                   allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(anomaly_router, prefix="/api")
 app.include_router(insights_router, prefix="/api") 

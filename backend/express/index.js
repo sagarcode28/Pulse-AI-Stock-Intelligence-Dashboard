@@ -12,7 +12,14 @@ const watchlistRouter = require("../express/routes/watchlist.js");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    process.env.FRONTEND_URL || "*"  
+  ],
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 

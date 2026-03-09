@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchWatchlist, addToWatchlist, removeFromWatchlist } from "../utils/api";
+import { Sparklines, SparklinesLine } from "react-sparklines";
 
 export default function WatchlistSidebar({ onSelectTicker, activeTicker }) {
   const [watchlist, setWatchlist] = useState([]);
@@ -74,7 +75,7 @@ export default function WatchlistSidebar({ onSelectTicker, activeTicker }) {
       <div className="flex flex-col gap-1">
         {loading ? (
           <div className="animate-pulse space-y-2">
-            {[1,2,3].map(i => (
+            {[1, 2, 3].map(i => (
               <div key={i} className="h-10 bg-gray-700/50 rounded-lg" />
             ))}
           </div>
@@ -87,41 +88,52 @@ export default function WatchlistSidebar({ onSelectTicker, activeTicker }) {
             <button
               key={item.ticker}
               onClick={() => onSelectTicker(item.ticker)}
-              className={`flex items-center justify-between w-full px-3 py-2.5
-                          rounded-lg text-xs transition-colors group
-                          ${activeTicker === item.ticker
-                            ? "bg-indigo-600/20 border border-indigo-500/40"
-                            : "hover:bg-gray-700/50 border border-transparent"
-                          }`}
+              className={`flex flex-col w-full px-3 py-2.5 rounded-lg text-xs
+                transition-colors group text-left
+                ${activeTicker === item.ticker
+                  ? "bg-indigo-600/20 border border-indigo-500/40"
+                  : "hover:bg-gray-700/50 border border-transparent"
+                }`}
             >
-              <div className="flex flex-col items-start">
-                <span className={`font-bold ${
-                  activeTicker === item.ticker ? "text-indigo-400" : "text-white"
-                }`}>
-                  {item.ticker}
-                </span>
-                {item.price && (
-                  <span className="text-gray-500">${item.price.toFixed(2)}</span>
-                )}
+              {/* Top row: ticker + change + remove */}
+              <div className="flex items-center justify-between w-full mb-1.5">
+                <div>
+                  <span className={`font-bold text-sm ${activeTicker === item.ticker ? "text-indigo-400" : "text-white"
+                    }`}>
+                    {item.ticker}
+                  </span>
+                  {item.price && (
+                    <span className="text-gray-500 ml-1.5 text-xs">
+                      ${item.price.toFixed(2)}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {item.change !== null && (
+                    <span className={`font-semibold text-xs ${item.change >= 0 ? "text-green-400" : "text-red-400"
+                      }`}>
+                      {item.change >= 0 ? "+" : ""}{item.change}%
+                    </span>
+                  )}
+                  <span
+                    onClick={(e) => handleRemove(e, item.ticker)}
+                    className="text-gray-700 hover:text-red-400 transition-colors
+                     opacity-0 group-hover:opacity-100 cursor-pointer"
+                  >
+                    ✕
+                  </span>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                {item.change !== null && (
-                  <span className={`font-semibold ${
-                    item.change >= 0 ? "text-green-400" : "text-red-400"
-                  }`}>
-                    {item.change >= 0 ? "+" : ""}{item.change}%
-                  </span>
-                )}
-                {/* Remove button - only visible on hover */}
-                <span
-                  onClick={(e) => handleRemove(e, item.ticker)}
-                  className="text-gray-700 hover:text-red-400 transition-colors
-                             opacity-0 group-hover:opacity-100 cursor-pointer"
-                >
-                  ✕
-                </span>
-              </div>
+              {/* Sparkline */}
+              {item.sparkline && item.sparkline.length > 1 && (
+                <Sparklines data={item.sparkline} height={28} margin={2}>
+                  <SparklinesLine
+                    color={item.change >= 0 ? "#4ade80" : "#f87171"}
+                    style={{ fill: "none", strokeWidth: 1.5 }}
+                  />
+                </Sparklines>
+              )}
             </button>
           ))
         )}
