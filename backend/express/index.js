@@ -7,6 +7,7 @@ require("dotenv").config();
 const stocksrouter = require('../express/routes/stocks.js');
 const insightsRouter = require('../express/routes/insights.js');
 const portfolioRouter = require('../express/routes/portfolio.js');
+const watchlistRouter = require("../express/routes/watchlist.js");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -18,6 +19,7 @@ app.use(express.urlencoded({extended: true}));
 app.use("/api/stocks", stocksrouter);
 app.use("/api/insights", insightsRouter);
 app.use("/api/portfolio", portfolioRouter);
+app.use("/api/watchlist", watchlistRouter);   
 
 app.get("/health", (req, res) => {
   res.json({

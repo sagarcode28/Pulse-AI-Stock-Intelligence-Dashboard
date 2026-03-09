@@ -30,4 +30,19 @@ export const deleteHolding = async (id) => {
   return res.data;
 };
 
+export const fetchWatchlist = async () => {
+  const res = await api.get("/api/watchlist");
+  return res.data;
+};
+
+export const addToWatchlist = async (ticker) => {
+  const res = await api.post("/api/watchlist", { ticker });
+  return res.data;
+};
+
+export const removeFromWatchlist = async (ticker) => {
+  const res = await api.delete(`/api/watchlist/${ticker}`);
+  return res.data;
+};
+
 export default api;
