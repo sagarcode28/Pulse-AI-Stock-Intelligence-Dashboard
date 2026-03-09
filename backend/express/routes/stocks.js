@@ -21,12 +21,8 @@ router.get("/:ticker", async(req, res) => {
                 ticker : ticker,
                 prices : recent
             })
-
-            anamolies = airesponse.data.anamolies;
-            console.log()
-            console.log("Got AI Response..");
         }catch(err){
-            console.error("Error Occured from Anamoly detection API");
+            console.error("Error Occured from Anamoly detection");
         }
 
         res.json({
