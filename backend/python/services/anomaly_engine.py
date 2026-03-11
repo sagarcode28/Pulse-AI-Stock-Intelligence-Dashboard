@@ -61,16 +61,16 @@ def detect_Anomalies(prices : List[Dict[str, Any]]) -> List[Dict[str, Any]] :
             
             direction = "SPIKE UP" if change["pct_changes"] > 0 else "DROP DOWN"
 
+            pct_val = change["pct_changes"]
             anamolies.append({
                 "date": change["date"],
-                "close" : change["close"],
-                "prev_close" : change["prev_close"],
-                "pct_change": change["pct_changes"],
-                "z_score" : round(z_score, 4),
-                "severity" : severity,
-                "direction" : direction,
-                "reason" : f"{direction} of {abs(change["pct_changes"]):.2f}% "
-                           f"(Z-score : {z_score:.2f}, mean : {mean:.2f}, std : {std:.2f})"
+                "close": change["close"],
+                "prev_close": change["prev_close"],
+                "pct_change": pct_val,
+                "z_score": round(z_score, 4),
+                "severity": severity,
+                "direction": direction,
+                "reason": f"{direction} of {abs(pct_val):.2f}% (Z-score: {z_score:.2f}, mean: {mean:.2f}, std: {std:.2f})"
             })
 
 
