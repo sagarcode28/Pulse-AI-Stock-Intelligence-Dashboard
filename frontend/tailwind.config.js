@@ -9,6 +9,9 @@ export default {
         base: "#0f172a",
       }
     },
+    fontFamily: {
+      mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+    }
   },
   plugins: [],
 }

@@ -8,14 +8,13 @@ export default function AnomalyTable({ anomalies = [] }) {
   return (
     <div className="bg-gray-800/60 border border-gray-700/50 rounded-xl p-5">
       <div className="flex items-center gap-2 mb-4">
-        <span>⚠️</span>
         <h2 className="text-sm font-semibold text-white">Anomaly Detection</h2>
         <span className="ml-auto text-xs text-gray-500">{anomalies.length} flagged</span>
       </div>
 
       {anomalies.length === 0 ? (
         <p className="text-sm text-gray-500 text-center py-6">
-          ✅ No anomalies detected in the last 30 days
+          No anomalies detected in the last 30 days
         </p>
       ) : (
         <div className="overflow-x-auto">

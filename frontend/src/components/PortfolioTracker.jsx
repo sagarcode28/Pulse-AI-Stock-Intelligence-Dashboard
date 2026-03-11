@@ -63,7 +63,6 @@ export default function PortfolioTracker() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2">
-          <span>💼</span>
           <h2 className="text-sm font-semibold text-white">Portfolio Tracker</h2>
         </div>
         <button
@@ -150,7 +149,6 @@ export default function PortfolioTracker() {
         </div>
       ) : holdings.length === 0 ? (
         <div className="text-center py-10 text-gray-600">
-          <p className="text-3xl mb-2">💼</p>
           <p className="text-sm">No holdings yet. Add your first stock above.</p>
         </div>
       ) : (

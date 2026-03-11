@@ -33,7 +33,6 @@ export default function AIInsightCard({ insight, loading, ticker }) {
     return (
       <div className="bg-gray-800/60 border border-gray-700/50 rounded-xl p-5">
         <div className="flex items-center gap-2 mb-3">
-          <span className="text-indigo-400">🧠</span>
           <h2 className="text-sm font-semibold text-white">AI Market Insight</h2>
         </div>
         <p className="text-gray-500 text-sm">Search a ticker to generate insight.</p>
@@ -47,7 +46,6 @@ export default function AIInsightCard({ insight, loading, ticker }) {
     <div className="bg-gray-800/60 border border-indigo-500/20 rounded-xl p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-indigo-400">🧠</span>
           <h2 className="text-sm font-semibold text-white">AI Market Insight — {ticker}</h2>
         </div>
         {source === "computed" && (
@@ -81,7 +79,7 @@ export default function AIInsightCard({ insight, loading, ticker }) {
       {/* Price target */}
       {price_target_hint && (
         <p className="text-xs text-gray-500">
-          🎯 <span className="text-gray-400">{price_target_hint}</span>
+          <span className="text-gray-400">{price_target_hint}</span>
         </p>
       )}
     </div>

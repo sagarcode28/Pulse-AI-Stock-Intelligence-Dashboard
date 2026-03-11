@@ -53,7 +53,6 @@ export default function PortfolioPieChart({ holdings = [] }) {
   return (
     <div className="bg-gray-800/60 border border-gray-700/50 rounded-xl p-5">
       <div className="flex items-center gap-2 mb-4">
-        <span>🥧</span>
         <h2 className="text-sm font-semibold text-white">Portfolio Allocation</h2>
         <span className="ml-auto text-xs text-gray-500">
           ${total.toLocaleString()} total

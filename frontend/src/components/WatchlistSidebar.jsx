@@ -34,7 +34,7 @@ export default function WatchlistSidebar({ onSelectTicker, activeTicker }) {
   };
 
   const handleRemove = async (e, ticker) => {
-    e.stopPropagation(); // don't trigger onSelectTicker
+    e.stopPropagation();
     await removeFromWatchlist(ticker);
     await load();
   };
@@ -43,13 +43,10 @@ export default function WatchlistSidebar({ onSelectTicker, activeTicker }) {
     <aside className="w-56 shrink-0 bg-gray-800/40 border border-gray-700/50
                       rounded-xl p-4 flex flex-col gap-3 h-fit">
 
-      {/* Header */}
       <div className="flex items-center gap-2">
-        <span>⭐</span>
         <h2 className="text-sm font-semibold text-white">Watchlist</h2>
       </div>
 
-      {/* Add input */}
       <div className="flex gap-1.5">
         <input
           type="text"
@@ -71,7 +68,6 @@ export default function WatchlistSidebar({ onSelectTicker, activeTicker }) {
         </button>
       </div>
 
-      {/* Watchlist items */}
       <div className="flex flex-col gap-1">
         {loading ? (
           <div className="animate-pulse space-y-2">
@@ -95,7 +91,6 @@ export default function WatchlistSidebar({ onSelectTicker, activeTicker }) {
                   : "hover:bg-gray-700/50 border border-transparent"
                 }`}
             >
-              {/* Top row: ticker + change + remove */}
               <div className="flex items-center justify-between w-full mb-1.5">
                 <div>
                   <span className={`font-bold text-sm ${activeTicker === item.ticker ? "text-indigo-400" : "text-white"
@@ -125,7 +120,6 @@ export default function WatchlistSidebar({ onSelectTicker, activeTicker }) {
                 </div>
               </div>
 
-              {/* Sparkline */}
               {item.sparkline && item.sparkline.length > 1 && (
                 <Sparklines data={item.sparkline} height={28} margin={2}>
                   <SparklinesLine

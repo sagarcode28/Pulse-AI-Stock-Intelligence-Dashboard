@@ -7,7 +7,7 @@ import KPICard from "./components/KPICard";
 import PortfolioTracker from "./components/PortfolioTracker";
 import WatchlistSidebar from "./components/WatchlistSidebar";
 
-const DEFAULT_TICKERS = ["AAPL", "TSLA", "GOOGL", "MSFT", "DAWN"];
+const DEFAULT_TICKERS = ["TSLA", "GOOGL", "MSFT"];
 
 export default function App() {
   const [ticker, setTicker] = useState("");
@@ -60,23 +60,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-base text-white">
-
-      {/* ── Navbar ── */}
       <nav className="border-b border-gray-800 px-6 py-4
                       flex items-center justify-between sticky top-0
                       bg-base/90 backdrop-blur-sm z-10">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">📈</span>
           <span className="text-lg font-bold text-white">Pulse AI</span>
-          <span className="text-xs text-gray-500 ml-1 border border-gray-700
-                           px-2 py-0.5 rounded-full">
-            Stock Intelligence
-          </span>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-xs text-gray-600 hidden md:block">
-            Powered by Alpha Vantage + Gemini
-          </span>
           {ticker && (
             <span className="text-xs bg-indigo-600/20 text-indigo-400
                              border border-indigo-500/30 px-3 py-1 rounded-full font-semibold">
@@ -89,7 +79,7 @@ export default function App() {
       {stockData?.source === "demo" && (
         <div className="bg-yellow-500/10 border-b border-yellow-500/20
                   px-6 py-2 text-xs text-yellow-400 text-center">
-          🎭 Showing simulated data — Alpha Vantage API quota reached.
+          Showing simulated data — Alpha Vantage API quota reached.
           Data resets daily. Cache persists for 1 hour.
         </div>
       )}
@@ -154,7 +144,7 @@ export default function App() {
                   : "text-gray-400 hover:text-white"
                   }`}
               >
-                {tab === "Dashboard" ? "📊 Dashboard" : "💼 Portfolio"}
+                {tab === "Dashboard" ? "Dashboard" : "Portfolio"}
               </button>
             ))}
           </div>
@@ -186,10 +176,10 @@ export default function App() {
                     <KPICard title="Day Change" value={`${dayChange >= 0 ? "+" : ""}${dayChange.toFixed(2)}`} subtitle={`${dayChangePct >= 0 ? "+" : ""}${dayChangePct.toFixed(2)}% vs prev close`} />
                   </div>
                   <div className="fade-in fade-in-delay-3">
-                    <KPICard title="Anomalies (30d)" value={anomalies.length} subtitle={anomalies.length > 0 ? "⚠ Unusual activity" : "✅ Clean price action"} />
+                    <KPICard title="Anomalies (30d)" value={anomalies.length} subtitle={anomalies.length > 0 ? "⚠ Unusual activity" : "Clean price action"} />
                   </div>
                   <div className="fade-in fade-in-delay-4">
-                    <KPICard title="Data Source" value={stockData.source === "cache" ? "⚡ Cached" : stockData.source === "demo" ? "🎭 Demo" : "🌐 Live"} subtitle={`${stockData.count} days analyzed`} />
+                    <KPICard title="Data Source" value={stockData.source === "cache" ? "Cached" : stockData.source === "demo" ? "Demo" : "Live"} subtitle={`${stockData.count} days analyzed`} />
                   </div>
                 </div>
               )}
@@ -216,7 +206,6 @@ export default function App() {
 
               {!stockData && !loadingStock && !error && (
                 <div className="text-center py-32 text-gray-700">
-                  <p className="text-6xl mb-4">📊</p>
                   <p className="text-lg font-semibold text-gray-500">
                     Search any stock ticker to begin
                   </p>
@@ -237,7 +226,7 @@ export default function App() {
       <footer className="border-t border-gray-800 mt-16 px-6 py-6
                    text-center text-xs text-gray-700">
         <p>
-          Pulse AI · Built with React, Express, FastAPI, MongoDB + Gemini
+          Pulse AI · Built with React, Express, FastAPI, MongoDB + Google Gemini
         </p>
         <p className="mt-1">
           Market data provided by{" "}
@@ -247,7 +236,6 @@ export default function App() {
             className="text-gray-600 hover:text-indigo-400 transition-colors">
             Alpha Vantage
           </a>
-          {" "}· For educational purposes only. Not financial advice.
         </p>
       </footer>
     </div>
