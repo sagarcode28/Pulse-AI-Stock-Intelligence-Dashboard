@@ -26,7 +26,7 @@ router.get("/:ticker", async (req, res) => {
         });
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ message: "error Occured while Processing the Request" });
+        res.status(500).json({ message: err.message.tostring() });
     }
 })
 
