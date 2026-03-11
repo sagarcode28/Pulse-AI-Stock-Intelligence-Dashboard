@@ -37,7 +37,8 @@ router.get("/:ticker", async (req, res) => {
         trend: "Neutral",
         risk_level: "Medium",
         summary: "Please try again in 30 seconds.",
-        price_target_hint: "Retry for full AI analysis."
+        price_target_hint: "Retry for full AI analysis.",
+        error_message: error.message
       }
     });
   }
