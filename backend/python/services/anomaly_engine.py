@@ -35,8 +35,8 @@ def detect_Anomalies(prices : List[Dict[str, Any]]) -> List[Dict[str, Any]] :
         })
     
     # changes Array is Blank 
-        if not changes:
-            return []
+    if not changes:
+        return []
     
     # Calculate Means and Standard Deviation:
     values = [c["pct_changes"] for c in changes]
