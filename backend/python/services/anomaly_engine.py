@@ -1,44 +1,27 @@
 from typing import List, Dict, Any
 
-def detect_Anomalies(prices : List[Dict[str, Any]]) -> List[Dict[str, Any]] : 
-    """
-        Logic:
-        calculate daily % change for each day: (close - prev_close) / prev_close * 100
-        calculate mean and standard deviation of all % change 
-        z score : (value - mean)/std deviation
-        |z - score| >  2.0 : unusal : Means that day the % change is far from its normal
-    """
-
-    if(len(prices) < 5):
+def detect_Anomalies(prices: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    if len(prices) < 5:
         return []
-    
-    # Calculate Daily % change
-    changes = []
 
-    # For loop is started from 0 : Because the first Price is not Considered
+    changes = []
     for i in range(1, len(prices)):
         prev_close = prices[i - 1]["close"]
         curr_close = prices[i]["close"]
-
-        if(prev_close == 0):
+        if prev_close == 0:
             continue
-
-        pct_change = (((curr_close - prev_close)/prev_close) * 100)
-
-        #Changes are Appended to the List
+        pct_change = ((curr_close - prev_close) / prev_close) * 100
         changes.append({
-            "index" : i,
-            "date" : prices[i]["date"],
-            "close" : curr_close,
-            "prev_close" : prev_close,
-            "pct_changes" : round(pct_change, 4)
+            "index": i,
+            "date": prices[i]["date"],
+            "close": curr_close,
+            "prev_close": prev_close,
+            "pct_changes": round(pct_change, 4)
         })
-    
-    # changes Array is Blank 
+
     if not changes:
         return []
-    
-    # Calculate Means and Standard Deviation:
+
     values = [c["pct_changes"] for c in changes]
     mean = sum(values) / len(values)
     variance = sum((x - mean) ** 2 for x in values) / len(values)
@@ -46,21 +29,14 @@ def detect_Anomalies(prices : List[Dict[str, Any]]) -> List[Dict[str, Any]] :
 
     if std == 0:
         return []
-    
-    # Calculate z - index of Each Day and flag anamolies
+
     anamolies = []
     for change in changes:
         z_score = (change["pct_changes"] - mean) / std
         abs_z = abs(z_score)
-
-        if abs_z > 2.0 :
-            if abs_z > 3.0:
-                severity = "HIGH"
-            else:
-                severity = "MEDIUM"
-            
+        if abs_z > 2.0:
+            severity = "HIGH" if abs_z > 3.0 else "MEDIUM"
             direction = "SPIKE UP" if change["pct_changes"] > 0 else "DROP DOWN"
-
             pct_val = change["pct_changes"]
             anamolies.append({
                 "date": change["date"],
@@ -70,8 +46,7 @@ def detect_Anomalies(prices : List[Dict[str, Any]]) -> List[Dict[str, Any]] :
                 "z_score": round(z_score, 4),
                 "severity": severity,
                 "direction": direction,
-                "reason": f"{direction} of {abs(pct_val):.2f}% (Z-score: {z_score:.2f}, mean: {mean:.2f}, std: {std:.2f})"
+                "reason": direction + " of " + str(round(abs(pct_val), 2)) + "% (Z-score: " + str(round(z_score, 2)) + ", mean: " + str(round(mean, 2)) + ", std: " + str(round(std, 2)) + ")"
             })
-
 
     return anamolies
