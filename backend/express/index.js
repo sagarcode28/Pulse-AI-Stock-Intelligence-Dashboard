@@ -33,6 +33,15 @@ app.get("/health", (req, res) => {
   });
 });
 
+setInterval(async () => {
+  try {
+    await axios.get(`${PY_SERVICE_URL}/health`);
+    console.log("FastAPI pinged");
+  } catch (e) {
+    console.warn("FastAPI ping failed:", e.message);
+  }
+}, 14 * 60 * 1000);
+
 moongose.connect(process.env.MONGO_URI).then(() => {
     console.log("Mongo DB Connected");
     app.listen(PORT, () => {

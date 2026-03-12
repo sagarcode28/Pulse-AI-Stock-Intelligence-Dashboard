@@ -24,7 +24,7 @@ router.get("/:ticker", async (req, res) => {
     const aiResponse = await axios.post(
       `${PY_SERVICE_URL}/api/insights`,
       { ticker, prices: recent },
-      { timeout: 60000 } 
+      { timeout: 120000 } 
     );
 
     res.json({ ticker, ...aiResponse.data });

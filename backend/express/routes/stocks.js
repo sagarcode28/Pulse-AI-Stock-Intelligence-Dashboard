@@ -28,7 +28,7 @@ router.get("/:ticker", async (req, res) => {
             const airesponse = await axios.post(`${PY_SERVICE_URL}/api/anomaly`, {
                 ticker: ticker,
                 prices: recent
-            }, { timeout: 30000 });
+            }, { timeout: 120000 });
         } catch (err) {
             console.error("Error Occured from Anamoly detection");
         }
